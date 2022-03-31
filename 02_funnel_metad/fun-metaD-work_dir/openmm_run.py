@@ -4,6 +4,7 @@ from openmm.unit import *
 from glob import glob
 import os
 import shutil
+import numpy as np
 
 # Load the topology and coordinate files.
 prmtop = AmberPrmtopFile('openmm.prm7')
@@ -100,7 +101,7 @@ integrator = LangevinIntegrator(300.0*kelvin,
 
 # Set the simulation platform.
 platform = Platform.getPlatformByName('CUDA')
-properties = {'CudaDeviceIndex': '0'}
+properties = {'CudaDeviceIndex': '0,1'}
 
 # Initialise and configure the simulation object.
 simulation = Simulation(prmtop.topology,
@@ -160,9 +161,9 @@ write_line = f'{time:15} {line[0]:20.16f} {line[1]:20.16f}          {sigma_proj}
 file.write(write_line)
 
 # Run the simulation.
-steps = 5000
-cycles = 5
-steps_per_cycle = int(5000/cycles)
+steps = 10000
+cycles = 10
+steps_per_cycle = int(steps/cycles)
 for x in range(0, cycles):
     meta.step(simulation, steps_per_cycle)
     current_cvs = np.array(list(meta.getCollectiveVariables(simulation)) + [meta.getHillHeight(simulation)])
