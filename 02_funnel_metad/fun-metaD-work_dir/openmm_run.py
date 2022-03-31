@@ -1,7 +1,6 @@
-from simtk.openmm.app import *
-from simtk.openmm import *
-from simtk.unit import *
-from metadynamics import *
+from openmm.app import *
+from openmm import *
+from openmm.unit import *
 from glob import glob
 import os
 import shutil
